@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savollar</title>
+  <script defer src="./index.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f3f7f9;
+      color: #333;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h1 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #34495e;
+    }
+
+    .card p {
+      font-size: 1.1rem;
+      margin: 15px 0;
+    }
+
+    .card img {
+      max-width: 100px;
+      margin: 5px;
+      border-radius: 8px;
+    }
+
+    .answer_card {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .answer_card button {
+      flex: 1;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .answer_card button:hover {
+      background-color: #2980b9;
+      transform: scale(1.05);
+    }
+
+    .q2_ans1_blue {
+      background-color: #3498db;
+    }
+
+    .q2_ans2_red {
+      background-color: #e74c3c;
+    }
+
+    .q2_ans3_green {
+      background-color: #2ecc71;
+    }
+
+    .q2_ans1_blue:hover {
+      background-color: #2980b9;
+    }
+
+    .q2_ans2_red:hover {
+      background-color: #c0392b;
+    }
+
+    .q2_ans3_green:hover {
+      background-color: #27ae60;
+    }
+
+    .error {
+      background-color: red !important;
+    }
+
+    .correct {
+      background-color: green !important;
+    }
+
+    .end {
+      display: block;
+      margin: 40px auto;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .end:hover {
+      background-color: #219150;
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      position: relative;
+    }
+
+    .modal form label {
+      display: flex;
+      flex-direction: column;
+      font-size: 1rem;
+      color: #2c3e50;
+    }
+
+    .modal form input {
+      padding: 10px;
+      margin-top: 6px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .modal form input:focus {
+      border-color: #3498db;
+    }
+
+    .submit_modal {
+      background-color: #3498db;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .submit_modal:hover {
+      background-color: #2980b9;
+    }
+
+    .close_modal {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close_modal:hover {
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Savollar</h1>
+  </header>
+  <main>
+    <!-- Question 1 -->
+    <div class="card">
+      <h1>1-savol</h1>
+      <div>
+        <img src="./../public/question_1_p1.png" />
+        <img src="./../public/question_1_p2.png" />
+        <img src="./../public/question_1_p3.png" />
+      </div>
+      <p>
+        Sizda 3 ta olma bor edi. Onangiz sizga yana 2 ta olma berdi. Endi sizda nechta olma bo‘ldi?
+      </p>
+      <div class="answer_card" id="savol_1">
+        <button class="question_1" id="q1_op1">4</button>
+        <button class="question_1" id="q1_op2">5</button>
+        <button class="question_1" id="q1_op3">6</button>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="card">
+      <h1>2-savol</h1>
+      <p>Berilgan ranglar ketma-ketligiga ahamiyat bering:</p>
+      <div>
+        <img src="../public/question_2_round_blue.png" />
+        <img src="../public/question_2_round_red.png" />
+        <img src="../public/question_2_round_blue.png" />
+        <img src="../public/question_2_round_red.png" />
+        <img src="../public/question_2_round_blue.png" />
+        <img src="../public/question_2_round_red.png" />
+        <img src="../public/question_2_round_blue.png" />
+        <h1>.......</h1>
+      </div>
+      <p>Sizningcha, nuqtalar o‘rniga qaysi rang mos keladi?</p>
+      <div class="answer_card" id="savol_2">
+        <button class="question_2" id="q2_op1" style="background-color: blue;"></button>
+        <button class="question_2" id="q2_op2" style="background-color: red;"></button>
+        <button class="question_2" id="q2_op3" style="background-color: green;"></button>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="card">
+      <h1>3-Savol</h1>
+      <p><b>7</b> va <b>5</b> sonlaridan qaysi biri kattaroq?</p>
+      <div class="answer_card" id="savol_3">
+        <button id="q3_op1" class="question_3">5</button>
+        <button id="q3_op2" class="question_3">7</button>
+        <button id="q3_op3" class="question_3">Ular teng</button>
+      </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="card">
+      <h1>4-Savol</h1>
+      <p>Quyidagi so'zlardan qaysi biri ortiqcha?</p>
+      <div class="answer_card" id="savol_4">
+        <button id="q4_op1" class="question_4">Kitob</button>
+        <button id="q4_op2" class="question_4">Qalam</button>
+        <button id="q4_op3" class="question_4">Mushuk</button>
+      </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="card">
+      <h1>5-savol</h1>
+      <div>
+        <img src="./../public/question_5_elephant.png" />
+        <img src="./../public/question_5_horse.png" />
+        <img src="./../public/question_5_rabit.png" />
+      </div>
+      <p>Rasmda berilgan xayvonlarning qaysi biri eng kichkinasi hisoblanadi?</p>
+      <div class="answer_card" id="savol_5">
+        <button id="q5_op1" class="question_5">Fil</button>
+        <button id="q5_op2" class="question_5">Ot</button>
+        <button id="q5_op3" class="question_5">Quyon</button>
+      </div>
+    </div>
+
+    <!-- End Button -->
+    <button class="end" id="end">Yakunlash</button>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <form>
+        <button  type="button" class="close_modal" id="closeModal">&times;</button>
+        <label>Ism
+          <input id="name" type="text" placeholder="Ismingizni kiriting" />
+        </label>
+        <label>Familiya
+          <input id="surname" type="text" placeholder="Familiyangizni kiriting" />
+        </label>
+        <button type="submit" class="submit_modal" id="submit_form">Yuborish</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

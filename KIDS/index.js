@@ -1,28 +1,32 @@
 let correct = 0;
 
-// Reusable functions
-function disableAllButtons(parentId) {
-  const buttons = document.querySelectorAll(`#${parentId} button`);
+// Reusable function: Reset styles before marking new answer
+function resetStyles(buttons) {
   buttons.forEach(btn => {
-    btn.disabled = true;
-    btn.style.cursor = 'not-allowed';
+    btn.classList.remove('correct', 'error');
   });
 }
 
+// Handle answer selection
 function handleQuestion(questionId, correctIndex, selectedIndex) {
   const buttons = document.querySelectorAll(`#${questionId} button`);
-  
+
+  // Clear previous styles
+  resetStyles(buttons);
+
+  const selectedButton = buttons[selectedIndex];
+
   if (selectedIndex === correctIndex) {
-    correct++;
-    buttons.forEach(btn => btn.classList.add('correct'));
+    selectedButton.classList.add('correct');
   } else {
-    buttons[selectedIndex].classList.add('error');
-    buttons[correctIndex].classList.add('correct');
+    selectedButton.classList.add('error');
   }
-  disableAllButtons(questionId);
+
+  // Update internal score count for final summary
+  // You can use Map to track latest answers if needed
 }
 
-// Setup questions
+// Setup question handlers
 function setupQuestion(questionId, correctIndex) {
   const buttons = document.querySelectorAll(`#${questionId} button`);
   buttons.forEach((btn, index) => {
@@ -30,31 +34,30 @@ function setupQuestion(questionId, correctIndex) {
   });
 }
 
-// Initialize quiz
+// DOM Load Logic
 document.addEventListener('DOMContentLoaded', () => {
-  // Question setup
+  // Setup each question
   setupQuestion('savol_1', 1);
   setupQuestion('savol_2', 1);
   setupQuestion('savol_3', 1);
   setupQuestion('savol_4', 2);
   setupQuestion('savol_5', 2);
 
-  // End button
+  // End button logic
   document.getElementById('end')?.addEventListener('click', () => {
     const modal = document.getElementById('modal');
     if (modal) {
       modal.style.display = 'flex';
       const scoreElement = document.getElementById('score');
       if (scoreElement) {
-        scoreElement.textContent = `Siz ${correct} ta savolga to'g'ri javob berdingiz!`;
+        scoreElement.textContent = `Javoblaringiz yuborilmoqda.`;
       }
     }
   });
 
-  // Close modal
+  // Modal close
   document.getElementById('closeModal')?.addEventListener('click', () => {
-    const modal = document.getElementById('modal');
-    if (modal) modal.style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
   });
 
   // Submit form
@@ -65,9 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const surname = document.getElementById('surname')?.value.trim();
     const submitBtn = document.getElementById('submit_form');
 
-    
-
-    
+    // Count how many .correct classes exist (i.e., correct answers)
+    const totalCorrect = document.querySelectorAll('button.correct').length;
+    correct = totalCorrect;
 
     try {
       const response = await fetch('https://script.google.com/macros/s/AKfycbyRho-mUoErkg_S62d1qJxSMowdoqOS2roP3ajXlKlps90jlNldjEVDJrJRdE_yYOPzOw/exec', {
@@ -81,40 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
           correct: correct,
           date: new Date().toISOString()
         }),
-        mode:"no-cors"
+        mode: "no-cors"
       });
 
-      const data = await response.json();
-      
-      if (!response.ok || data.status === 'error') {
-        throw new Error(data.message || 'Server error');
-      }
-      
       alert("Yuborildi! Rahmat.");
-      const modal = document.getElementById('modal');
-      if (modal) modal.style.display = 'none';
-      
-      // Reset form and quiz
-      const nameInput = document.getElementById('name');
-      const surnameInput = document.getElementById('surname');
-      if (nameInput) nameInput.value = '';
-      if (surnameInput) surnameInput.value = '';
-      
-      // Reset quiz state
-      correct = 0;
-      document.querySelectorAll('button.answer-btn').forEach(btn => {
-        btn.disabled = false;
-        btn.classList.remove('correct', 'error');
-        btn.style.cursor = 'pointer';
-      });
+      location.reload();
     } catch (err) {
+      console.error("Yuborishda xatolik:", err);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Yuborish";
       }
-      location.reload()
-
     }
   });
 });

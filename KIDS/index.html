@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Savollar</title>
-  <script defer src="./index.js"></script>
   <style>
     * {
       margin: 0;
@@ -35,6 +34,7 @@
       display: flex;
       flex-direction: column;
       gap: 30px;
+      position: relative;
     }
 
     .card {
@@ -90,36 +90,26 @@
       transform: scale(1.05);
     }
 
-    .q2_ans1_blue {
-      background-color: #3498db;
+    /* Special styles for second question options */
+    #savol_2 button {
+      flex: none !important;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      padding: 0;
+      transition: box-shadow 0.3s ease;
     }
 
-    .q2_ans2_red {
-      background-color: #e74c3c;
-    }
-
-    .q2_ans3_green {
-      background-color: #2ecc71;
-    }
-
-    .q2_ans1_blue:hover {
-      background-color: #2980b9;
-    }
-
-    .q2_ans2_red:hover {
-      background-color: #c0392b;
-    }
-
-    .q2_ans3_green:hover {
-      background-color: #27ae60;
+    #savol_2 button:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
     .error {
-      background-color: red !important;
+      background-color: #e74c3c !important;
     }
 
     .correct {
-      background-color: green !important;
+      background-color: #2ecc71 !important;
     }
 
     .end {
@@ -140,6 +130,7 @@
       transform: scale(1.05);
     }
 
+    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -217,6 +208,70 @@
     .close_modal:hover {
       color: #e74c3c;
     }
+
+    /* Score circle shown after Yakunlash clicked */
+    #score-circle {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background-color: #2ecc71;
+      color: white;
+      font-size: 4rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 20px #27ae60;
+      z-index: 1100;
+      user-select: none;
+      animation: popIn 0.4s ease forwards;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Thank you box after submitting */
+    #thank-you-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #27ae60;
+      color: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      font-size: 1.8rem;
+      font-weight: 600;
+      box-shadow: 0 0 30px #219150;
+      z-index: 1200;
+      text-align: center;
+      display: none;
+      user-select: none;
+      animation: fadeInScale 0.5s ease forwards;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
   </style>
 </head>
 <body>
@@ -228,9 +283,9 @@
     <div class="card">
       <h1>1-savol</h1>
       <div>
-        <img src="./../public/question_1_p1.png" />
-        <img src="./../public/question_1_p2.png" />
-        <img src="./../public/question_1_p3.png" />
+        <img src="./../public/question_1_p1.png" alt="Q1 Image 1" />
+        <img src="./../public/question_1_p2.png" alt="Q1 Image 2" />
+        <img src="./../public/question_1_p3.png" alt="Q1 Image 3" />
       </div>
       <p>
         Sizda 3 ta olma bor edi. Onangiz sizga yana 2 ta olma berdi. Endi sizda nechta olma bo‘ldi?
@@ -247,13 +302,13 @@
       <h1>2-savol</h1>
       <p>Berilgan ranglar ketma-ketligiga ahamiyat bering:</p>
       <div>
-        <img src="../public/question_2_round_blue.png" />
-        <img src="../public/question_2_round_red.png" />
-        <img src="../public/question_2_round_blue.png" />
-        <img src="../public/question_2_round_red.png" />
-        <img src="../public/question_2_round_blue.png" />
-        <img src="../public/question_2_round_red.png" />
-        <img src="../public/question_2_round_blue.png" />
+        <img src="../public/question_2_round_blue.png" alt="blue" />
+        <img src="../public/question_2_round_red.png" alt="red" />
+        <img src="../public/question_2_round_blue.png" alt="blue" />
+        <img src="../public/question_2_round_red.png" alt="red" />
+        <img src="../public/question_2_round_blue.png" alt="blue" />
+        <img src="../public/question_2_round_red.png" alt="red" />
+        <img src="../public/question_2_round_blue.png" alt="blue" />
         <h1>.......</h1>
       </div>
       <p>Sizningcha, nuqtalar o‘rniga qaysi rang mos keladi?</p>
@@ -266,7 +321,7 @@
 
     <!-- Question 3 -->
     <div class="card">
-      <h1>3-Savol</h1>
+      <h1>3-savol</h1>
       <p><b>7</b> va <b>5</b> sonlaridan qaysi biri kattaroq?</p>
       <div class="answer_card" id="savol_3">
         <button id="q3_op1" class="question_3">5</button>
@@ -277,7 +332,7 @@
 
     <!-- Question 4 -->
     <div class="card">
-      <h1>4-Savol</h1>
+      <h1>4-savol</h1>
       <p>Quyidagi so'zlardan qaysi biri ortiqcha?</p>
       <div class="answer_card" id="savol_4">
         <button id="q4_op1" class="question_4">Kitob</button>
@@ -290,9 +345,9 @@
     <div class="card">
       <h1>5-savol</h1>
       <div>
-        <img src="./../public/question_5_elephant.png" />
-        <img src="./../public/question_5_horse.png" />
-        <img src="./../public/question_5_rabit.png" />
+        <img src="./../public/question_5_elephant.png" alt="Elephant" />
+        <img src="./../public/question_5_horse.png" alt="Horse" />
+        <img src="./../public/question_5_rabit.png" alt="Rabbit" />
       </div>
       <p>Rasmda berilgan xayvonlarning qaysi biri eng kichkinasi hisoblanadi?</p>
       <div class="answer_card" id="savol_5">
@@ -305,19 +360,149 @@
     <!-- End Button -->
     <button class="end" id="end">Yakunlash</button>
 
+    <!-- Score circle -->
+    <div id="score-circle" style="display:none;"></div>
+
     <!-- Modal -->
     <div class="modal" id="modal">
       <form>
-        <button  type="button" class="close_modal" id="closeModal">&times;</button>
+        <button type="button" class="close_modal" id="closeModal">&times;</button>
         <label>Ism
-          <input id="name" type="text" placeholder="Ismingizni kiriting" />
+          <input id="name" type="text" placeholder="Ismingizni kiriting" required />
         </label>
         <label>Familiya
-          <input id="surname" type="text" placeholder="Familiyangizni kiriting" />
+          <input id="surname" type="text" placeholder="Familiyangizni kiriting" required />
         </label>
         <button type="submit" class="submit_modal" id="submit_form">Yuborish</button>
       </form>
     </div>
+
+    <!-- Thank you box -->
+    <div id="thank-you-box">Etiboringiz uchun rahmat</div>
   </main>
+
+  <audio id="click-sound" src="./click.mp3" preload="auto"></audio>
+
+  <script>
+    const correctAnswers = new Map();
+
+    const clickSound = document.getElementById('click-sound');
+
+    function resetStyles(buttons) {
+      buttons.forEach(btn => btn.classList.remove('correct', 'error'));
+    }
+
+    function handleQuestion(questionId, correctIndex, selectedIndex) {
+      const buttons = document.querySelectorAll(`#${questionId} button`);
+      resetStyles(buttons);
+
+      const selectedButton = buttons[selectedIndex];
+
+      // Play click sound
+      if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      }
+
+      if (selectedIndex === correctIndex) {
+        selectedButton.classList.add('correct');
+        correctAnswers.set(questionId, true);
+      } else {
+        selectedButton.classList.add('error');
+        correctAnswers.set(questionId, false);
+      }
+    }
+
+    function setupQuestion(questionId, correctIndex) {
+      const buttons = document.querySelectorAll(`#${questionId} button`);
+      buttons.forEach((btn, index) => {
+        btn.addEventListener('click', () => handleQuestion(questionId, correctIndex, index));
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupQuestion('savol_1', 1); // answer index 1 = 5
+      setupQuestion('savol_2', 1); // answer index 1 = red
+      setupQuestion('savol_3', 1); // answer index 1 = 7
+      setupQuestion('savol_4', 2); // answer index 2 = Mushuk
+      setupQuestion('savol_5', 2); // answer index 2 = Quyon
+
+      const endBtn = document.getElementById('end');
+      const modal = document.getElementById('modal');
+      const closeModalBtn = document.getElementById('closeModal');
+      const submitFormBtn = document.getElementById('submit_form');
+      const scoreCircle = document.getElementById('score-circle');
+      const thankYouBox = document.getElementById('thank-you-box');
+
+      // Hide thank you box initially
+      thankYouBox.style.display = 'none';
+
+      endBtn.addEventListener('click', () => {
+        // Count correct answers
+        let totalCorrect = 0;
+        correctAnswers.forEach(value => { if(value) totalCorrect++; });
+
+        // Show score circle with total correct
+        scoreCircle.textContent = totalCorrect;
+        scoreCircle.style.display = 'flex';
+
+        // After 2 seconds show modal and hide score circle
+        setTimeout(() => {
+          scoreCircle.style.display = 'none';
+          modal.style.display = 'flex';
+        }, 2000);
+      });
+
+      closeModalBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      submitFormBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const surname = document.getElementById('surname').value.trim();
+
+        if (!name || !surname) {
+          alert("Iltimos, ism va familiyangizni kiriting.");
+          return;
+        }
+
+        // Count correct answers again
+        let totalCorrect = 0;
+        correctAnswers.forEach(value => { if(value) totalCorrect++; });
+
+        submitFormBtn.disabled = true;
+        submitFormBtn.textContent = "Yuborilmoqda...";
+
+        try {
+          await fetch('https://script.google.com/macros/s/AKfycbyRho-mUoErkg_S62d1qJxSMowdoqOS2roP3ajXlKlps90jlNldjEVDJrJRdE_yYOPzOw/exec', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              name: name,
+              surname: surname,
+              correct: totalCorrect,
+              date: new Date().toISOString()
+            }),
+            mode: "no-cors"
+          });
+
+          modal.style.display = 'none';
+          thankYouBox.style.display = 'block';
+
+          // After 3 seconds reload the page
+          setTimeout(() => {
+            location.reload();
+          }, 3000);
+        } catch (err) {
+          console.error("Yuborishda xatolik:", err);
+          alert("Xatolik yuz berdi, iltimos qayta urinib ko‘ring.");
+          submitFormBtn.disabled = false;
+          submitFormBtn.textContent = "Yuborish";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
